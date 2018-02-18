@@ -274,24 +274,24 @@ class Solver:
   self.max_depth = 0
   self.start_time = time.time()
 
- def display_results(self, s):
+ def output_results(self, s):
   path = s.get_path_to_goal()
   elapsed_time = time.time() - self.start_time
   maxrss = float(resource.getrusage(resource.RUSAGE_SELF).ru_maxrss)
   maxrss /= 1024
-  print("path_to_goal: " + str(path))
-  print("cost_of_path: " + str(len(path)))
-  print("nodes_expanded: " + str(self.nodes_expanded))
-  print("search_depth: " + str(len(path)))
-  print("max_search_depth: " + str(self.max_depth))
-  print("running_time: %.8f" % elapsed_time)
-  print("max_ram_usage: %.8f" % maxrss)
-  
+  with open("output.txt", "w") as out_fp:
+    out_fp.write("path_to_goal: {0}\n".format(path))
+    out_fp.write("cost_of_path: {0}\n".format(len(path)))
+    out_fp.write("nodes_expanded: {0}\n".format(self.nodes_expanded))
+    out_fp.write("search_depth: {0}\n".format(len(path)))
+    out_fp.write("max_search_depth: {0}\n".format(self.max_depth))
+    out_fp.write("running_time: %.8f\n" % elapsed_time)
+    out_fp.write("max_ram_usage: %.8f\n" % maxrss)
+
  def bfs(self):
   """
   This function solves the n-puzzle using the breadth-first-search algorithm"
   """
-  print("bfs")
   self.start_time = time.time()
   self.frontier = StateDeque()
   self.explored = StateDeque()
@@ -303,7 +303,7 @@ class Solver:
    self.explored.append(s)
    
    if s.is_goal_state():
-    self.display_results(s)
+    self.output_results(s)
     return s
    
    neighbors = s.get_neighbors()
@@ -323,7 +323,6 @@ class Solver:
   """
   This function solves the n-puzzle using the depth-first-search algorithm
   """
-  print("dfs")
   self.start_time = time.time()
   self.frontier = StateDeque()
   self.explored = StateDeque()
@@ -335,7 +334,7 @@ class Solver:
    self.explored.append(s)
    
    if s.is_goal_state():
-    self.display_results(s)
+    self.output_results(s)
     return s
    
    neighbors = s.get_neighbors()
@@ -356,7 +355,6 @@ class Solver:
   """
   This function solves the n-puzzle using the A* search algorithm"
   """
-  print("ast")
   self.start_time = time.time()
   self.frontier = StatePQ()
   self.explored = StateDeque()
@@ -368,7 +366,7 @@ class Solver:
    self.explored.append(s)
    
    if s.is_goal_state():
-    self.display_results(s)
+    self.output_results(s)
     return s
    
    neighbors = s.get_neighbors()
